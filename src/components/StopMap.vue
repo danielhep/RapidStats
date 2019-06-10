@@ -1,27 +1,50 @@
 <template>
-  <l-map
-    style="height: 50vh; width: 100%"
-    :zoom="zoom"
-    :center="center"
-    @update:zoom="zoomUpdated"
-    @update:center="centerUpdated"
-    @update:bounds="boundsUpdated"
-  >
-    <l-marker
-      v-for="loc in stopsLatLng"
-      :key="loc._id"
-      :lat-lng="loc.loc"
-      @click="updateSelectedMarker(loc)"
+  <div>
+    <v-toolbar
+      dense
+      dark
     >
-      <l-popup @click="updateSelectedMarker">
-        Name: {{ loc.name }} <br>
-        Zone: {{ loc.zone_id }} <br>
-        Code: {{ loc.code }} <br>
-        ID: {{ loc.stop_id }}
-      </l-popup>
-    </l-marker>
-    <l-tile-layer :url="url" />
-  </l-map>
+      <v-btn-toggle
+        multiple
+      >
+        <v-btn
+          flat
+          v-model="mapSettings.closeAfterSelect"
+        >
+          Hide on Select
+        </v-btn>
+        <v-btn
+          flat
+          v-model="mapSettings.filterByStop"
+        >
+          Filter Routes
+        </v-btn>
+      </v-btn-toggle>
+    </v-toolbar>
+    <l-map
+      style="height: 50vh; width: 100%; z-index: 1;"
+      :zoom="zoom"
+      :center="center"
+      @update:zoom="zoomUpdated"
+      @update:center="centerUpdated"
+      @update:bounds="boundsUpdated"
+    >
+      <l-marker
+        v-for="loc in stopsLatLng"
+        :key="loc._id"
+        :lat-lng="loc.loc"
+        @click="updateSelectedMarker(loc)"
+      >
+        <l-popup @click="updateSelectedMarker">
+          Name: {{ loc.name }} <br>
+          Zone: {{ loc.zone_id }} <br>
+          Code: {{ loc.code }} <br>
+          ID: {{ loc.stop_id }}
+        </l-popup>
+      </l-marker>
+      <l-tile-layer :url="url" />
+    </l-map>
+  </div>
 </template>
 <script>
 import { LMap, LTileLayer, LMarker, LPopup } from 'vue2-leaflet'
@@ -42,7 +65,11 @@ export default {
       zoom: 15,
       center: [48.751911, -122.478683],
       bounds: { _northEast: { lat: 0, lng: 0 }, _southWest: { lat: 0, lng: 0 } },
-      selectedMarker: null
+      selectedMarker: null,
+      mapSettings: {
+        closeAfterSelect: true,
+        filterByStop: false
+      }
     }
   },
   computed: {
@@ -84,6 +111,9 @@ export default {
     updateSelectedMarker (event) {
       this.selectedMarker = event.id
       this.$emit('stopSelected', event.id)
+      if (this.mapSettings.closeAfterSelect) {
+        this.$emit('closePane')
+      }
     }
   }
 }
