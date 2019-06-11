@@ -1,35 +1,45 @@
 <template>
-  <v-container>
-    <v-expansion-panel
-      expand
-      v-model="panel"
-      popout
+  <v-container grid-list-md>
+    <v-layout
+      row
+      wrap
     >
-      <v-expansion-panel-content value="true">
-        <template v-slot:header>
-          <div>Stop Selection</div>
-        </template>
-        <v-card>
-          <stop-map
-            @stopSelected="updateSelectedStop"
-            @closePane="closeMap"
-          />
-        </v-card>
-      </v-expansion-panel-content>
-      <v-expansion-panel-content value="false">
-        <template v-slot:header>
-          <div>Schedule by Stop</div>
-        </template>
-        <v-card />
-      </v-expansion-panel-content>
-      <v-expansion-panel-content value="false">
-        <template v-slot:header>
-          <div>Stop Statistics</div>
-        </template>
-        <v-card />
-      </v-expansion-panel-content>
-    </v-expansion-panel>
-    Selected marker: {{ selectedMarker }}
+      <v-flex xs10>
+        <v-expansion-panel
+          expand
+          v-model="panel"
+          popout
+        >
+          <v-expansion-panel-content value="true">
+            <template v-slot:header>
+              <div>Stop Selection</div>
+            </template>
+            <v-card>
+              <stop-map
+                @stopSelected="updateSelectedStop"
+                @closePane="closeMap"
+              />
+            </v-card>
+          </v-expansion-panel-content>
+          <v-expansion-panel-content value="false">
+            <template v-slot:header>
+              <div>Schedule by Stop</div>
+            </template>
+            <v-card />
+          </v-expansion-panel-content>
+          <v-expansion-panel-content value="false">
+            <template v-slot:header>
+              <div>Stop Statistics</div>
+            </template>
+            <v-card />
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+        Selected marker: {{ selectedMarker }}
+      </v-flex>
+      <v-flex>
+        Hello
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 <script>
@@ -47,12 +57,6 @@ export default {
     return {
       active: null,
       selectedMarker: null,
-      dropdown_font: [
-        { text: 'Arial' },
-        { text: 'Calibri' },
-        { text: 'Courier' },
-        { text: 'Verdana' }
-      ],
       panel: [1, 0, 0]
     }
   },
