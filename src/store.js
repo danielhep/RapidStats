@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Axios from 'axios'
+import { DateTime } from 'luxon'
 
 Vue.use(Vuex)
 
@@ -33,15 +34,18 @@ export default new Vuex.Store({
       commit('setRoutes', res.data)
     },
     async getDepartures ({ commit }, { routes, date, stop }) {
-      console.log('getting departures')
-      console.log(date)
-      console.log(stop)
       let res = await Axios.get(`${apiURL}/schedule`, {
         params: {
           routes, date, stop
         }
       })
-      console.log(res.data)
+      res.data.forEach((departure, ind) => {
+        res.data[ind]['datetime'] = DateTime.fromISO(departure.time)
+        res.data[ind]['time'] = res.data[ind]['datetime'].toLocaleString(DateTime.TIME_SIMPLE)
+        res.data[ind]['spacing'] = Math.round(10 * (departure.spacing) / 60) / 10 // spacing is in seconds, change to minutes
+        res.data[ind]['hourAlternate'] = res.data[ind]['datetime'].hour % 2
+        res.data[ind]['frequentService'] = res.data[ind]['spacing'] < 16
+      })
       commit('setDepartures', res.data)
     }
   }
