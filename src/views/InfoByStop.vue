@@ -25,7 +25,10 @@
               <div>Schedule by Stop</div>
             </template>
             <v-card>
-              <stop-schedule :stopid="selectedMarker" />
+              <stop-schedule
+                :date="date"
+                :stopid="selectedMarker"
+              />
             </v-card>
           </v-expansion-panel-content>
           <v-expansion-panel-content value="false">
@@ -46,6 +49,31 @@
           label="Routes"
           multiple
         />
+        <v-menu
+          v-model="datePickMenu"
+          :close-on-content-click="false"
+          :nudge-right="40"
+          lazy
+          transition="scale-transition"
+          offset-y
+          full-width
+        >
+          <template v-slot:activator="{ on }">
+            <v-text-field
+              v-model="date"
+              label="Select Date"
+              prepend-icon="event"
+              readonly
+              v-on="on"
+            />
+          </template>
+          <v-date-picker
+            @input="datePickMenu = false"
+            v-model="date"
+            no-title
+            scrollable
+          />
+        </v-menu>
       </v-flex>
     </v-layout>
   </v-container>
@@ -69,7 +97,9 @@ export default {
       active: null,
       selectedMarker: null,
       panel: [1, 1, 0],
-      selectedRoutes: []
+      date: new Date().toISOString().substr(0, 10),
+      selectedRoutes: [],
+      datePickMenu: false
     }
   },
   methods: {

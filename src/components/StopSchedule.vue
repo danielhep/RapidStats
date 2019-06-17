@@ -54,7 +54,7 @@
 
 <script>
 export default {
-  props: ['stopid'],
+  props: ['stopid', 'date'],
   data () {
     return {
       loading: false,
@@ -95,9 +95,13 @@ export default {
   },
   watch: {
     stopid: async function (newStop) {
-      console.log('new stop selected')
       this.loading = true
-      await this.$store.dispatch('getDepartures', { stop: newStop, date: '2019-06-17' })
+      await this.$store.dispatch('getDepartures', { stop: newStop, date: this.date })
+      this.loading = false
+    },
+    date: async function (newDate) {
+      this.loading = true
+      await this.$store.dispatch('getDepartures', { stop: this.stopid, date: this.date })
       this.loading = false
     }
   },
