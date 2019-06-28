@@ -6,7 +6,7 @@ import Qs from 'querystring'
 
 Vue.use(Vuex)
 
-let apiURL = 'https://fifhxbyp89.execute-api.us-east-1.amazonaws.com/dev'
+let apiURL = process.env.VUE_APP_API_URL
 
 export default new Vuex.Store({
   state: {
