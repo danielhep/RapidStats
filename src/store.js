@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Axios from 'axios'
 import { DateTime } from 'luxon'
+import Qs from 'querystring'
 
 Vue.use(Vuex)
 
@@ -34,9 +35,15 @@ export default new Vuex.Store({
       commit('setRoutes', res.data)
     },
     async getDepartures ({ commit }, { routes, date, stop }) {
+      console.log({
+        routes, date, stop
+      })
       let res = await Axios.get(`${apiURL}/schedule`, {
         params: {
           routes, date, stop
+        },
+        paramsSerializer: function (params) {
+          return Qs.stringify(params)
         }
       })
       res.data.forEach((departure, ind) => {

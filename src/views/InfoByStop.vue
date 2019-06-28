@@ -27,6 +27,7 @@
             <v-card>
               <stop-schedule
                 :date="date"
+                :routes="selectedRoutes"
                 :stopid="selectedMarker"
               />
             </v-card>

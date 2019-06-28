@@ -53,8 +53,10 @@
 </template>
 
 <script>
+import _ from 'lodash'
+
 export default {
-  props: ['stopid', 'date'],
+  props: ['stopid', 'date', 'routes'],
   data () {
     return {
       loading: false,
@@ -96,12 +98,18 @@ export default {
   watch: {
     stopid: async function (newStop) {
       this.loading = true
-      await this.$store.dispatch('getDepartures', { stop: newStop, date: this.date })
+      await this.$store.dispatch('getDepartures', { stop: this.stopid, date: this.date, routes: this.routes })
       this.loading = false
     },
     date: async function (newDate) {
       this.loading = true
-      await this.$store.dispatch('getDepartures', { stop: this.stopid, date: this.date })
+      await this.$store.dispatch('getDepartures', { stop: this.stopid, date: this.date, routes: this.routes })
+      this.loading = false
+    },
+    routes: async function (newDate) {
+      this.loading = true
+      console.log(this.routes)
+      await this.$store.dispatch('getDepartures', { stop: this.stopid, date: this.date, routes: this.routes })
       this.loading = false
     }
   },

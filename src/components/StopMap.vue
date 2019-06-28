@@ -63,7 +63,7 @@ export default {
     return {
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       zoom: 15,
-      center: [48.751911, -122.478683],
+      center: [33.158092, -117.350594],
       bounds: { _northEast: { lat: 0, lng: 0 }, _southWest: { lat: 0, lng: 0 } },
       selectedMarker: null,
       mapSettings: {
