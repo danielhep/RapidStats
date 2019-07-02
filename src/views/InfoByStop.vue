@@ -4,7 +4,7 @@
       row
       wrap
     >
-      <v-flex xs9>
+      <v-flex md9>
         <v-expansion-panel
           expand
           :value="panel"
@@ -40,8 +40,8 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-flex>
-      <v-flex xs3>
-        <v-select
+      <v-flex md3>
+        <v-autocomplete
           v-model="selectedRoutes"
           :items="routeList"
           clearable
