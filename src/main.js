@@ -7,6 +7,8 @@ import { Icon } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { Settings } from 'luxon'
 
+import VueAnalytics from 'vue-analytics'
+
 Settings.defaultZoneName = 'utc'
 
 delete Icon.Default.prototype._getIconUrl
@@ -24,3 +26,8 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+Vue.use(VueAnalytics, {
+  id: 'UA-141610301-2',
+  router
+})

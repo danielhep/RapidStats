@@ -105,8 +105,8 @@ export default {
   },
   methods: {
     updateSelectedStop (event) {
-      console.log(event)
       this.selectedMarker = event
+      this.$ga.event('InfoByStop', 'updateSelectedStop', 'updated', event)
     },
     closeMap () {
       // close with set method because normal
