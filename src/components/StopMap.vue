@@ -29,32 +29,50 @@
       @update:center="centerUpdated"
       @update:bounds="boundsUpdated"
     >
-      <l-marker
-        v-for="loc in stopsLatLng"
-        :key="loc._id"
-        :lat-lng="loc.loc"
-        @click="updateSelectedMarker(loc)"
+      <v-marker-cluster
+        v-if="stopsLatLng.length"
+        :options="{spiderfyOnMaxZoom: false, disableClusteringAtZoom: 17}"
       >
-        <l-popup @click="updateSelectedMarker">
-          Name: {{ loc.name }} <br>
-          Zone: {{ loc.zone_id }} <br>
-          Code: {{ loc.code }} <br>
-          ID: {{ loc.stop_id }}
-        </l-popup>
-      </l-marker>
+        <l-marker
+          v-for="loc in stopsLatLng"
+          :key="loc._id"
+          :lat-lng="loc.loc"
+          @click="updateSelectedMarker(loc)"
+        >
+          <l-icon :icon-anchor="[18, 36]">
+            <v-icon
+              color="red"
+              large
+            >
+              place
+            </v-icon>
+          </l-icon>
+          <l-popup @click="updateSelectedMarker">
+            Name: {{ loc.name }} <br>
+            Zone: {{ loc.zone_id }} <br>
+            Code: {{ loc.code }} <br>
+            ID: {{ loc.stop_id }}
+          </l-popup>
+        </l-marker>
+      </v-marker-cluster>
       <l-tile-layer :url="url" />
     </l-map>
   </div>
 </template>
 <script>
-import { LMap, LTileLayer, LMarker, LPopup } from 'vue2-leaflet'
+import { LMap, LTileLayer, LMarker, LPopup, LIcon } from 'vue2-leaflet'
+import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
+import 'leaflet.markercluster/dist/MarkerCluster.css'
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 
 export default {
   components: {
     LMap,
     LTileLayer,
     LMarker,
-    LPopup
+    LIcon,
+    LPopup,
+    'v-marker-cluster': Vue2LeafletMarkerCluster
   },
   async beforeMount () {
     await this.$store.dispatch('getStops')
@@ -77,13 +95,10 @@ export default {
       let state = this.$store.state
       let out = []
       for (var stop of state.stops) {
-        let bounds = this.bounds
         let lat = stop.stop_lat
         let lon = stop.stop_lon
         let loc = [lat, lon]
         let valid = true
-        if (!(lat < bounds._northEast.lat && lat > bounds._southWest.lat)) valid = false
-        if (!(lon < bounds._northEast.lng && lon > bounds._southWest.lng)) valid = false
         if (valid) {
           out.push({
             loc,
@@ -97,6 +112,30 @@ export default {
       }
       return out
     }
+    // stopsLatLng: function () {
+    //   let state = this.$store.state
+    //   let out = []
+    //   for (var stop of state.stops) {
+    //     let bounds = this.bounds
+    //     let lat = stop.stop_lat
+    //     let lon = stop.stop_lon
+    //     let loc = [lat, lon]
+    //     let valid = true
+    //     if (!(lat < bounds._northEast.lat && lat > bounds._southWest.lat)) valid = false
+    //     if (!(lon < bounds._northEast.lng && lon > bounds._southWest.lng)) valid = false
+    //     if (valid) {
+    //       out.push({
+    //         loc,
+    //         id: stop._id,
+    //         name: stop.stop_name,
+    //         zone_id: stop.zone_id,
+    //         stop_id: stop.stop_id,
+    //         code: stop.stop_code
+    //       })
+    //     }
+    //   }
+    //   return out
+    // }
   },
   methods: {
     zoomUpdated (zoom) {
