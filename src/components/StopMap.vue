@@ -75,7 +75,7 @@ export default {
     'v-marker-cluster': Vue2LeafletMarkerCluster
   },
   async beforeMount () {
-    await this.$store.dispatch('getStops')
+    if (!this.$store.state.stops.length) { await this.$store.dispatch('getStops') }
   },
   data () {
     return {

@@ -12,7 +12,9 @@ export default new Vuex.Store({
   state: {
     stops: [],
     routes: [],
-    departures: []
+    departures: [],
+    agencies: [],
+    currentAgency: {}
   },
   mutations: {
     setStops (state, stops) {
@@ -23,12 +25,22 @@ export default new Vuex.Store({
     },
     setDepartures (state, departures) {
       state.departures = departures
+    },
+    setAgencies (state, agencies) {
+      state.agencies = agencies
+    },
+    setCurrentAgency (state, agency) {
+      state.currentAgency = agency
     }
   },
   actions: {
     async getStops ({ commit }) {
       let res = await Axios.get(`${apiURL}/stops`)
       commit('setStops', res.data)
+    },
+    async getAgencies ({ commit }) {
+      let res = await Axios.get(`${apiURL}/agencies`)
+      commit('setAgencies', res.data)
     },
     async getRoutes ({ commit }) {
       let res = await Axios.get(`${apiURL}/routes`)
