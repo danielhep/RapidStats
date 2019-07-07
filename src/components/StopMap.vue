@@ -8,13 +8,13 @@
         multiple
       >
         <v-btn
-          flat
+          text
           v-model="mapSettings.closeAfterSelect"
         >
           Hide on Select
         </v-btn>
         <v-btn
-          flat
+          text
           v-model="mapSettings.filterByStop"
         >
           Filter Routes
@@ -57,6 +57,16 @@
       </v-marker-cluster>
       <l-tile-layer :url="url" />
     </l-map>
+    <v-overlay
+      :absolute="true"
+      opacity=".7"
+      v-if="loading"
+    >
+      <v-progress-circular
+        indeterminate
+        size="64"
+      />
+    </v-overlay>
   </div>
 </template>
 <script>
@@ -75,7 +85,9 @@ export default {
     'v-marker-cluster': Vue2LeafletMarkerCluster
   },
   async beforeMount () {
+    this.loading = true
     if (!this.$store.state.stops.length) { await this.$store.dispatch('getStops') }
+    this.loading = false
   },
   data () {
     return {
@@ -87,7 +99,8 @@ export default {
       mapSettings: {
         closeAfterSelect: true,
         filterByStop: false
-      }
+      },
+      loading: false
     }
   },
   computed: {
@@ -112,30 +125,6 @@ export default {
       }
       return out
     }
-    // stopsLatLng: function () {
-    //   let state = this.$store.state
-    //   let out = []
-    //   for (var stop of state.stops) {
-    //     let bounds = this.bounds
-    //     let lat = stop.stop_lat
-    //     let lon = stop.stop_lon
-    //     let loc = [lat, lon]
-    //     let valid = true
-    //     if (!(lat < bounds._northEast.lat && lat > bounds._southWest.lat)) valid = false
-    //     if (!(lon < bounds._northEast.lng && lon > bounds._southWest.lng)) valid = false
-    //     if (valid) {
-    //       out.push({
-    //         loc,
-    //         id: stop._id,
-    //         name: stop.stop_name,
-    //         zone_id: stop.zone_id,
-    //         stop_id: stop.stop_id,
-    //         code: stop.stop_code
-    //       })
-    //     }
-    //   }
-    //   return out
-    // }
   },
   methods: {
     zoomUpdated (zoom) {

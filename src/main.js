@@ -8,6 +8,8 @@ import 'leaflet/dist/leaflet.css'
 import { Settings } from 'luxon'
 
 import VueAnalytics from 'vue-analytics'
+import Vuetify from 'vuetify'
+// import 'vuetify/dist/vuetify.min.css'
 
 Settings.defaultZoneName = 'utc'
 
@@ -21,9 +23,16 @@ Icon.Default.mergeOptions({
 
 Vue.config.productionTip = false
 
+Vue.use(Vuetify)
+
 new Vue({
   router,
   store,
+  vuetify: new Vuetify({
+    theme: {
+      dark: true
+    }
+  }),
   render: h => h(App)
 }).$mount('#app')
 

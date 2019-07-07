@@ -5,40 +5,41 @@
       wrap
     >
       <v-flex md9>
-        <v-expansion-panel
-          expand
+        <v-expansion-panels
+          multiple
+          accordion
           :value="panel"
         >
-          <v-expansion-panel-content value="true">
-            <template v-slot:header>
+          <v-expansion-panel value="true">
+            <v-expansion-panel-header>
               <div>Stop Selection</div>
-            </template>
-            <v-card>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
               <stop-map
                 @stopSelected="updateSelectedStop"
                 @closePane="closeMap"
               />
-            </v-card>
-          </v-expansion-panel-content>
-          <v-expansion-panel-content value="false">
-            <template v-slot:header>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <v-expansion-panel value="false">
+            <v-expansion-panel-header>
               <div>Schedule by Stop</div>
-            </template>
-            <v-card>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
               <stop-schedule
                 :date="date"
                 :routes="selectedRoutes"
                 :stopid="selectedMarker"
               />
-            </v-card>
-          </v-expansion-panel-content>
-          <v-expansion-panel-content value="false">
-            <template v-slot:header>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <v-expansion-panel value="false">
+            <v-expansion-panel-header>
               <div>Stop Statistics</div>
-            </template>
+            </v-expansion-panel-header>
             <v-card />
-          </v-expansion-panel-content>
-        </v-expansion-panel>
+          </v-expansion-panel>
+        </v-expansion-panels>
       </v-flex>
       <v-flex md3>
         <v-autocomplete
@@ -54,7 +55,6 @@
           v-model="datePickMenu"
           :close-on-content-click="false"
           :nudge-right="40"
-          lazy
           transition="scale-transition"
           offset-y
           full-width
