@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import Axios from 'axios'
 import { DateTime } from 'luxon'
 import Qs from 'querystring'
+import _ from 'lodash'
 
 Vue.use(Vuex)
 
@@ -29,13 +30,18 @@ export default new Vuex.Store({
     setAgencies (state, agencies) {
       state.agencies = agencies
     },
-    setCurrentAgency (state, agency) {
+    setCurrentAgency (state, agencyID) {
+      let agency = _.find(state.agencies, { _id: agencyID })
       state.currentAgency = agency
     }
   },
   actions: {
-    async getStops ({ commit }) {
-      let res = await Axios.get(`${apiURL}/stops`)
+    async getStops ({ state, commit }) {
+      let res = await Axios.get(`${apiURL}/stops`, {
+        params: {
+          agency: state.currentAgency.agency_key
+        }
+      })
       commit('setStops', res.data)
     },
     async getAgencies ({ commit }) {
@@ -43,7 +49,11 @@ export default new Vuex.Store({
       commit('setAgencies', res.data)
     },
     async getRoutes ({ commit }) {
-      let res = await Axios.get(`${apiURL}/routes`)
+      let res = await Axios.get(`${apiURL}/routes`, {
+        params: {
+          agency: this.state.currentAgency.agency_key
+        }
+      })
       commit('setRoutes', res.data)
     },
     async getDepartures ({ commit }, { routes, date, stop }) {
@@ -52,7 +62,10 @@ export default new Vuex.Store({
       })
       let res = await Axios.get(`${apiURL}/schedule`, {
         params: {
-          routes, date, stop
+          routes,
+          date,
+          stop,
+          agency: this.state.currentAgency.agency_key
         },
         paramsSerializer: function (params) {
           return Qs.stringify(params)

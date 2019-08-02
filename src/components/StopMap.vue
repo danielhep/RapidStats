@@ -86,14 +86,15 @@ export default {
   },
   async beforeMount () {
     this.loading = true
+    this.center = this.agencyCenter
     if (!this.$store.state.stops.length) { await this.$store.dispatch('getStops') }
     this.loading = false
   },
   data () {
     return {
       url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      zoom: 15,
-      center: [33.158092, -117.350594],
+      zoom: 10,
+      center: [0, 0],
       bounds: { _northEast: { lat: 0, lng: 0 }, _southWest: { lat: 0, lng: 0 } },
       selectedMarker: null,
       mapSettings: {
@@ -104,6 +105,10 @@ export default {
     }
   },
   computed: {
+    agencyCenter: function () {
+      let loc = this.$store.state.currentAgency.agency_center
+      return loc.reverse()
+    },
     stopsLatLng: function () {
       let state = this.$store.state
       let out = []

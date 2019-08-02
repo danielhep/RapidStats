@@ -4,12 +4,14 @@
       :headers="headers"
       :items="departures"
       class="elevation-1"
-      :pagination.sync="pages"
       :loading="loading"
-      disable-initial-sort
+      :items-per-page="25"
     >
       <template v-slot:items="props">
-        <td :class="{'grey': props.item.hourAlternate, 'darken-2': props.item.hourAlternate}">
+        <td
+          class="grey darken-4"
+          :class="{'grey': props.item.hourAlternate, 'darken-2': props.item.hourAlternate}"
+        >
           {{ props.item.routeName }}
         </td>
         <td
@@ -59,8 +61,6 @@ export default {
     return {
       loading: false,
       pages: {
-        // descending: boolean,
-        // page: number,
         rowsPerPage: 25 // -1 for All
       },
       headers: [
@@ -95,24 +95,23 @@ export default {
   },
   watch: {
     stopid: async function (newStop) {
-      this.loading = true
-      await this.$store.dispatch('getDepartures', { stop: this.stopid, date: this.date, routes: this.routes })
-      this.loading = false
+      this.updateDepartures()
     },
     date: async function (newDate) {
-      this.loading = true
-      await this.$store.dispatch('getDepartures', { stop: this.stopid, date: this.date, routes: this.routes })
-      this.loading = false
+      this.updateDepartures()
     },
     routes: async function (newDate) {
-      this.loading = true
-      console.log(this.routes)
-      await this.$store.dispatch('getDepartures', { stop: this.stopid, date: this.date, routes: this.routes })
-      this.loading = false
+      this.updateDepartures()
     }
   },
-  async beforeMount () {
-    // await this.$store.dispatch('getDepartures', { stop: this.stopId, date: '2019-06-11' })
+  methods: {
+    async updateDepartures () {
+      this.loading = true
+      if (this.stopid) {
+        await this.$store.dispatch('getDepartures', { stop: this.stopid, date: this.date, routes: this.routes })
+      }
+      this.loading = false
+    }
   }
 }
 </script>
