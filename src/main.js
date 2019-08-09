@@ -30,7 +30,7 @@ new Vue({
   store,
   vuetify: new Vuetify({
     theme: {
-      dark: true
+      dark: false
     }
   }),
   render: h => h(App)

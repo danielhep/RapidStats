@@ -1,9 +1,6 @@
 <template>
   <div>
-    <v-toolbar
-      dense
-      dark
-    >
+    <v-toolbar>
       <v-btn-toggle
         multiple
       >
